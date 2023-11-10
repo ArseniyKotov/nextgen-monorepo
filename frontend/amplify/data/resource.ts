@@ -1,26 +1,27 @@
-import { defineData } from '@aws-amplify/backend-graphql';
-import { type ClientSchema, a } from '@aws-amplify/amplify-api-next-alpha';
-import * as cdk from 'aws-cdk-lib'
+import * as cdk from "aws-cdk-lib";
+import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 const schema = a.schema({
-  Post: a.model({
-    title: a.string(),
-    comments: a.hasMany("Comment")
-  }).authorization([a.allow.public()]),
+  Post: a
+    .model({
+      title: a.string(),
+      comments: a.hasMany("Comment"),
+    })
+    .authorization([a.allow.public()]),
 
   Comment: a.model({
     content: a.string(),
-    post: a.belongsTo('Post')
-  })
+    post: a.belongsTo("Post"),
+  }),
 });
 
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
-  schema, 
+  schema,
   authorizationModes: {
     apiKeyConfig: {
-      expires: cdk.Duration.days(30)
-    }
-  }
+      expires: cdk.Duration.days(30),
+    },
+  },
 });
